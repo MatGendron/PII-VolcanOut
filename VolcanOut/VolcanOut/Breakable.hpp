@@ -12,8 +12,9 @@ public:
 
 	void draw(sf::RenderWindow* window);
 
-	sf::Texture texture;
-	//bool texture_initialized;
+	static sf::Texture& texture() { static sf::Texture tex; return tex; };
+	//sf::Texture texture;
+	//bool texture_initialized = false;
 
 private:
 	sf::Sprite sprite;

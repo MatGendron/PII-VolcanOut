@@ -16,15 +16,19 @@ int main()
                 window.close();
         }
         
-        Breakable test = Breakable(10, 10);
+        
         //sf::Texture texture;
         //texture.loadFromFile("Breakable_tex.png");
         //sf::Sprite sprite;
         //sprite.setTexture(texture);
 
         window.clear();
-        //window.draw(sprite);
-        test.draw(&window);
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                Breakable test = Breakable(16 * i, 16 * j);
+                test.draw(&window);
+            }
+        }
         window.display();
     }
 
