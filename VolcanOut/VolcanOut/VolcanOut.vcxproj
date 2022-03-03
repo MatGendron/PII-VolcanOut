@@ -151,7 +151,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Breakable.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Tile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Breakable.hpp" />
+    <ClInclude Include="Tile.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Level_files\Test_level.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\Breakable_tex.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Textures\UnBreakable_tex.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
