@@ -24,12 +24,18 @@
     <ClCompile Include="Breakable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Unbreakable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Breakable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Unbreakable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

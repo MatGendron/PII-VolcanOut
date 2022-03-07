@@ -7,7 +7,8 @@ using namespace std;
 class Tile {
 public:
 	static sf::Texture texture;
-	int x;
-	int y;
-	Tile(int x, int y);
+	float _x;
+	float _y;
+	Tile();
+	Tile(float x, float y);
 };

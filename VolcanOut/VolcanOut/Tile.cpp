@@ -3,9 +3,14 @@
 
 using namespace std;
 
-Tile::Tile(int x, int y) {
-	this->x = x;
-	this->y = y;
+Tile::Tile() {
+	_x = 0;
+	_y = 0;
+}
+
+Tile::Tile(float x, float y) {
+	_x = x;
+	_y = y;
 }
 
 

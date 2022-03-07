@@ -1,21 +1,22 @@
 #pragma once
 
 #include "Tile.hpp"
+//#include <iostream>
 
 using namespace std;
 
-class Breakable :Tile {
+class Unbreakable :Tile {
 
 public:
-	Breakable(float x, float y, sf::Texture* texture);
+	Unbreakable(float x, float y, sf::Texture* texture);
 
 	void draw(sf::RenderWindow* window);
-	
+
 	sf::Texture* getTexture() {
 		return _texture;
 	}
 
-	void setTexture(sf::Texture* texture){
+	void setTexture(sf::Texture* texture) {
 		_texture = texture;
 	}
 

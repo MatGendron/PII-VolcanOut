@@ -154,10 +154,12 @@
     <ClCompile Include="Breakable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Unbreakable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Breakable.hpp" />
     <ClInclude Include="Tile.hpp" />
+    <ClInclude Include="Unbreakable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Level_files\Test_level.txt">
