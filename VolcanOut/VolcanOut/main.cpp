@@ -16,6 +16,7 @@ int main()
     breakableTex.loadFromFile("Textures/Breakable_tex.png");
     sf::Texture unbreakableTex;
     unbreakableTex.loadFromFile("Textures/UnBreakable_tex.png");
+    sf::Clock clock;
 
     //Level reading
     int level[LEVEL_HEIGHT][LEVEL_WIDTH];
@@ -67,17 +68,20 @@ int main()
                 }
             }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            view.move(0.08, 0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            view.move(-0.08, 0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            view.move(0, -0.08);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            view.move(0, 0.08);
+        if (clock.getElapsedTime().asMilliseconds() > 50) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                view.move(1, 0);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                view.move(-1, 0);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                view.move(0, -1);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                view.move(0, 1);
+            }
+            clock.restart();
         }
         window.setView(view);
         window.display();
