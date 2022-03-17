@@ -38,6 +38,9 @@
     <ClInclude Include="Unbreakable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Level_files\Test_level.txt">
@@ -49,6 +52,54 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\UnBreakable_tex.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\fall_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\fall_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\idle_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\idle_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\jump_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\jump_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\pick_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\pick_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk0_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk0_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk1_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk1_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk2_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk2_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk3_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Character\walk3_right.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
