@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Breakable.hpp"
 #include "Unbreakable.hpp"
+#include "Player.hpp"
 #include <iostream>
 #include <fstream>
 #define LEVEL_WIDTH 12
@@ -19,7 +20,12 @@ int main()
     sf::Clock clock;
 
     //Level reading
-    int level[LEVEL_HEIGHT][LEVEL_WIDTH];
+    int** level;
+    level = new int* [LEVEL_HEIGHT];
+    for (int i = 0; i < LEVEL_HEIGHT; i++) {
+        level[i] = new int[LEVEL_WIDTH];
+    }
+    
     ifstream levelFile;
     string line;
     levelFile.open("Level_files/Test_level.txt");
@@ -35,6 +41,9 @@ int main()
             i++;
         }
     }
+
+    //Player initialization
+    Player player = Player(6 * 16, 9 * 16, level);
 
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
 
@@ -68,24 +77,35 @@ int main()
                 }
             }
         }
-        if (clock.getElapsedTime().asMilliseconds() > 50) {
+        if (clock.getElapsedTime().asMilliseconds() > 80) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                view.move(1, 0);
+                player.setDirection(Direction::RIGHT);
+                player.walk();
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                view.move(-1, 0);
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                player.setDirection(Direction::LEFT);
+                player.walk();
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 view.move(0, -1);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 view.move(0, 1);
+            }
+            else {
+                player.idle();
             }
             clock.restart();
         }
+        player.draw(&window);
         window.setView(view);
         window.display();
     }
+
+    for (int i = 0; i < LEVEL_HEIGHT; i++) {
+        delete level[i];
+    }
+    delete[] level;
 
     return 0;
 }
