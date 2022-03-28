@@ -1,10 +1,11 @@
 #include "Player.hpp"
+#include <iostream>
 
 using namespace std;
 
 Player::Player(float x, float y, int** level) {
-	_x = x;
-	_y = y;
+	_x = x*16;
+	_y = y*16;
 	_idleL.loadFromFile("Textures/Character/idle_left.png");
 	_idleR.loadFromFile("Textures/Character/idle_right.png");
 	_jumpL.loadFromFile("Textures/Character/jump_left.png");
@@ -24,23 +25,85 @@ Player::Player(float x, float y, int** level) {
 	_direction = Direction::RIGHT;
 	idle();
 	_level = level;
+	_gravity = 10;
 }
 
 void Player::idle() {
-	_state = State::IDLE;
-	_sprite.setTexture(_direction == Direction::LEFT ? _idleL : _idleR);
-	_walkCycle = 0;
+	switch (_state) {
+	case State::JUMP:
+		jump(false);
+		break;
+	case State::FALL:
+		fall(false);
+		break;
+	default:
+		_state = State::IDLE;
+		_sprite.setTexture(_direction == Direction::LEFT ? _idleL : _idleR);
+		_walkCycle = 0;
+		break;
+	}
+	
 }
 
 void Player::walk() {
-	_state = State::WALK;
-	_sprite.setTexture(_direction == Direction::LEFT ? _walkL[_walkCycle] : _walkR[_walkCycle]);
-	_x += (float) _direction*8;
-	_walkCycle = (_walkCycle + 1) % 4;
+	_x += (float)_direction * 8;
+	switch (_state) {
+	case State::JUMP:
+		jump(false);
+		break;
+	case State::FALL:
+		fall(false);
+		break;
+	default:
+		_state = State::WALK;
+		_sprite.setTexture(_direction == Direction::LEFT ? _walkL[_walkCycle] : _walkR[_walkCycle]);
+		_walkCycle = (_walkCycle + 1) % 4;
+		if (!checkCollision(Direction::DOWN)) {
+			fall(true);
+		}
+	}
 }
-void Player::jump(){}
-void Player::fall(){}
+
+void Player::jump(bool init){
+	if (/*!checkCollision(Direction::UP) && (*/_state == State::IDLE || _state == State::WALK) {
+		_state = State::JUMP;
+		if (init) {
+			_vertSpeed = 30;
+		}
+		_sprite.setTexture(_direction == Direction::LEFT ? _jumpL : _jumpR);
+		_vertSpeed = max(0.0f,_vertSpeed-_gravity);
+		if (_vertSpeed > 0) {
+			_y -= _vertSpeed;
+		}
+		else {
+			fall(true);
+		}
+	}
+}
+
+void Player::fall(bool init){}
+
 void Player::pick(){}
+
+bool Player::checkCollision(Direction dir) {
+	switch (dir) {
+	case Direction::UP:
+		return _level[(int) floor(_x/16)][(int) (_y/16)-1] == 0 && _level[(int) ceil(_x / 16)][(int)(_y / 16)-1] == 0;
+		break;
+	case Direction::DOWN:
+		return _level[(int)floor(_x / 16)][(int)(_y / 16) + 1] == 0 && _level[(int)ceil(_x / 16)][(int)(_y / 16) + 1] == 0;
+		break;
+	case Direction::RIGHT:
+		return _level[(int)(_x / 16) + 1][(int)_y / 16] == 0;
+		break;
+	case Direction::LEFT:
+		return _level[(int)(_x / 16) - 1][(int)_y / 16] == 0;
+		break;
+	default:
+		throw std::runtime_error("Invalid direction in checkCollision call.");
+		break;
+	}
+}
 
 void Player::draw(sf::RenderWindow* window) {
 	_sprite.setPosition(_x, _y);

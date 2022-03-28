@@ -3,7 +3,7 @@
 
 using namespace std;
 
-enum class Direction : int { LEFT=-1, RIGHT=1 };
+enum class Direction : int { LEFT=-1, RIGHT=1, UP, DOWN };
 enum class State : int {WALK, IDLE, JUMP, FALL, PICK};
 
 class Player {
@@ -16,9 +16,11 @@ public:
 
 	void idle();
 	void walk();
-	void jump();
-	void fall();
+	void jump(bool init);
+	void fall(bool init);
 	void pick();
+
+	bool checkCollision(Direction dir);
 
 	void draw(sf::RenderWindow* window);
 
@@ -43,6 +45,9 @@ private:
 	sf::Sprite _sprite;
 
 	int _walkCycle;
+	float _vertSpeed;
+
+	float _gravity;
 
 	int** _level;
 };

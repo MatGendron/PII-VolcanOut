@@ -43,7 +43,7 @@ int main()
     }
 
     //Player initialization
-    Player player = Player(6 * 16, 9 * 16, level);
+    Player player = Player(6, 9, level);
 
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
 
@@ -87,7 +87,7 @@ int main()
                 player.walk();
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                view.move(0, -1);
+                player.jump(true);
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 view.move(0, 1);
