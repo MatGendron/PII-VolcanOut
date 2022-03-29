@@ -25,7 +25,7 @@ Player::Player(float x, float y, int** level) {
 	_direction = Direction::RIGHT;
 	idle();
 	_level = level;
-	_gravity = 10;
+	_gravity = 2;
 }
 
 void Player::idle() {
@@ -46,7 +46,9 @@ void Player::idle() {
 }
 
 void Player::walk() {
-	_x += (float)_direction * 8;
+	if (!checkCollision(_direction)) {
+		_x += (float)_direction * 8;
+	}
 	switch (_state) {
 	case State::JUMP:
 		jump(false);
@@ -65,13 +67,15 @@ void Player::walk() {
 }
 
 void Player::jump(bool init){
-	if (/*!checkCollision(Direction::UP) && (*/_state == State::IDLE || _state == State::WALK) {
-		_state = State::JUMP;
-		if (init) {
-			_vertSpeed = 30;
+	if (!checkCollision(Direction::UP)){
+		if (_state == State::IDLE || _state == State::WALK) {
+			_state = State::JUMP;
+			if (init) {
+				_vertSpeed = 12;
+			}
 		}
 		_sprite.setTexture(_direction == Direction::LEFT ? _jumpL : _jumpR);
-		_vertSpeed = max(0.0f,_vertSpeed-_gravity);
+		_vertSpeed = max(0.0f, _vertSpeed - _gravity);
 		if (_vertSpeed > 0) {
 			_y -= _vertSpeed;
 		}
@@ -79,25 +83,44 @@ void Player::jump(bool init){
 			fall(true);
 		}
 	}
+	else if(_state==State::JUMP) {
+		fall(true);
+	}
 }
 
-void Player::fall(bool init){}
+void Player::fall(bool init){
+	if (!checkCollision(Direction::DOWN)) {
+		if (init) {
+			_state = State::FALL;
+			_vertSpeed = -2;
+		}
+		_sprite.setTexture(_direction == Direction::LEFT ? _fallL : _fallR);
+		_vertSpeed = max(-12.f, _vertSpeed - _gravity);
+		_y -= _vertSpeed;
+	}
+	else {
+		_state = State::IDLE;
+	}
+}
 
 void Player::pick(){}
 
+/*Checks if the next tile in the Direction dir is occupied
+* Returns true if there is a tile in that direction
+*/
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level[(int) floor(_x/16)][(int) (_y/16)-1] == 0 && _level[(int) ceil(_x / 16)][(int)(_y / 16)-1] == 0;
+		return _level[(int) (_y - 1) / 16][(int)floor(_x / 16)] != 0 || _level[(int)(_y - 1) / 16][(int)ceil(_x / 16)] != 0;
 		break;
 	case Direction::DOWN:
-		return _level[(int)floor(_x / 16)][(int)(_y / 16) + 1] == 0 && _level[(int)ceil(_x / 16)][(int)(_y / 16) + 1] == 0;
+		return _level[(int)(_y+17) / 16][(int)floor(_x / 16)] != 0 || _level[(int)(_y+17) / 16][(int)ceil(_x / 16)] != 0;
 		break;
 	case Direction::RIGHT:
-		return _level[(int)(_x / 16) + 1][(int)_y / 16] == 0;
+		return _level[(int)_y / 16][(int)(_x + 17) / 16] != 0;
 		break;
 	case Direction::LEFT:
-		return _level[(int)(_x / 16) - 1][(int)_y / 16] == 0;
+		return _level[(int)_y / 16][(int)(_x - 1) / 16] != 0;
 		break;
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");

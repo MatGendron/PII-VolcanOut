@@ -62,13 +62,13 @@ int main()
                 switch (level[i][j]) {
                 case 1:
                 {
-                    Unbreakable bTile((float)j * 16, (float)i * 16, &unbreakableTex);
+                    Unbreakable bTile((float)j, (float)i, &unbreakableTex);
                     bTile.draw(&window);
                     break;
                 }
                 case 2:
                 {
-                    Breakable ubTile((float)j * 16, (float)i * 16, &breakableTex);
+                    Breakable ubTile((float)j, (float)i, &breakableTex);
                     ubTile.draw(&window);
                     break;
                 }
@@ -78,16 +78,16 @@ int main()
             }
         }
         if (clock.getElapsedTime().asMilliseconds() > 80) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                player.jump(true);
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 player.setDirection(Direction::RIGHT);
                 player.walk();
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 player.setDirection(Direction::LEFT);
                 player.walk();
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                player.jump(true);
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 view.move(0, 1);
