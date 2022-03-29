@@ -81,18 +81,18 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 player.jump(true);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 player.setDirection(Direction::RIGHT);
                 player.walk();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 player.setDirection(Direction::LEFT);
                 player.walk();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                view.move(0, 1);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                player.place();
             }
-            else {
+            if (event.type != sf::Event::KeyPressed) {
                 player.idle();
             }
             clock.restart();
@@ -103,7 +103,7 @@ int main()
     }
 
     for (int i = 0; i < LEVEL_HEIGHT; i++) {
-        delete level[i];
+        delete[] level[i];
     }
     delete[] level;
 

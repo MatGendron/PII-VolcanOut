@@ -19,6 +19,7 @@ public:
 	void jump(bool init);
 	void fall(bool init);
 	void pick();
+	void place();
 
 	bool checkCollision(Direction dir);
 

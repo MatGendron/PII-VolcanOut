@@ -105,6 +105,13 @@ void Player::fall(bool init){
 
 void Player::pick(){}
 
+void Player::place() {
+	if (!checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
+		_direction == Direction::LEFT ? _level[(int)(_y + 24) / 16][(int)floor(_x / 16)] = 2 :
+			_level[(int)(_y + 24) / 16][(int)ceil(_x / 16)] = 2;
+	}
+}
+
 /*Checks if the next tile in the Direction dir is occupied
 * Returns true if there is a tile in that direction
 */
