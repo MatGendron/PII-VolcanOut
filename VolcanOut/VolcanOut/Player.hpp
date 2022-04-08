@@ -18,10 +18,12 @@ public:
 	void walk();
 	void jump(bool init);
 	void fall(bool init);
-	void pick();
+	void pick(Direction dir);
 	void place();
 
 	bool checkCollision(Direction dir);
+
+	void processDirection(Direction dir);
 
 	void draw(sf::RenderWindow* window);
 

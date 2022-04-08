@@ -19,11 +19,14 @@ int main()
     unbreakableTex.loadFromFile("Textures/UnBreakable_tex.png");
     sf::Clock clock;
 
-    //Level reading
+    //Level reading. 
+    //Beware that the coordinates for initiliazing and reading
+    //the level (for drawing or checking collision)
+    //are reversed.
     int** level;
-    level = new int* [LEVEL_HEIGHT];
-    for (int i = 0; i < LEVEL_HEIGHT; i++) {
-        level[i] = new int[LEVEL_WIDTH];
+    level = new int* [LEVEL_WIDTH];
+    for (int i = 0; i < LEVEL_WIDTH; i++) {
+        level[i] = new int[LEVEL_HEIGHT];
     }
     
     ifstream levelFile;
@@ -35,7 +38,7 @@ int main()
             int j = 0;
             for (char& c : line) {
                 //Conversion of char in file into int
-                level[i][j] = c-'0'; 
+                level[j][i] = c-'0'; 
                 j++;
             }
             i++;
@@ -57,18 +60,18 @@ int main()
         }
 
         window.clear();
-        for (int i = 0; i < LEVEL_HEIGHT; i++) {
-            for (int j = 0; j < LEVEL_WIDTH; j++) {
+        for (int i = 0; i < LEVEL_WIDTH; i++) {
+            for (int j = 0; j < LEVEL_HEIGHT; j++) {
                 switch (level[i][j]) {
                 case 1:
                 {
-                    Unbreakable bTile((float)j, (float)i, &unbreakableTex);
+                    Unbreakable bTile((float)i, (float)j, &unbreakableTex);
                     bTile.draw(&window);
                     break;
                 }
                 case 2:
                 {
-                    Breakable ubTile((float)j, (float)i, &breakableTex);
+                    Breakable ubTile((float)i, (float)j, &breakableTex);
                     ubTile.draw(&window);
                     break;
                 }
@@ -77,20 +80,22 @@ int main()
                 }
             }
         }
+
+        Unbreakable ubTile(5.f, 5.f, &unbreakableTex);
+        ubTile.draw(&window);
+
         if (clock.getElapsedTime().asMilliseconds() > 80) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                player.jump(true);
-            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                player.setDirection(Direction::RIGHT);
-                player.walk();
+                player.processDirection(Direction::RIGHT);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                player.setDirection(Direction::LEFT);
-                player.walk();
+                player.processDirection(Direction::LEFT);
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                player.processDirection(Direction::UP);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                player.place();
+                player.processDirection(Direction::DOWN);
             }
             if (event.type != sf::Event::KeyPressed) {
                 player.idle();

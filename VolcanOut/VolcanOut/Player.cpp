@@ -25,7 +25,7 @@ Player::Player(float x, float y, int** level) {
 	_direction = Direction::RIGHT;
 	idle();
 	_level = level;
-	_gravity = 2;
+	_gravity = 0.5;
 }
 
 void Player::idle() {
@@ -71,7 +71,7 @@ void Player::jump(bool init){
 		if (_state == State::IDLE || _state == State::WALK) {
 			_state = State::JUMP;
 			if (init) {
-				_vertSpeed = 12;
+				_vertSpeed = 6;
 			}
 		}
 		_sprite.setTexture(_direction == Direction::LEFT ? _jumpL : _jumpR);
@@ -92,10 +92,10 @@ void Player::fall(bool init){
 	if (!checkCollision(Direction::DOWN)) {
 		if (init) {
 			_state = State::FALL;
-			_vertSpeed = -2;
+			_vertSpeed = -6;
 		}
 		_sprite.setTexture(_direction == Direction::LEFT ? _fallL : _fallR);
-		_vertSpeed = max(-12.f, _vertSpeed - _gravity);
+		_vertSpeed = max(-6.f, _vertSpeed - _gravity);
 		_y -= _vertSpeed;
 	}
 	else {
@@ -103,7 +103,13 @@ void Player::fall(bool init){
 	}
 }
 
-void Player::pick(){}
+void Player::pick(Direction dir){
+	if (_state == State::IDLE || _state == State::WALK) {
+		_state = State::PICK;
+		_sprite.setTexture(_direction == Direction::LEFT ? _pickL : _pickR);
+	}
+	//int x; int y;
+}
 
 void Player::place() {
 	if (!checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
@@ -118,20 +124,55 @@ void Player::place() {
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level[(int) (_y - 1) / 16][(int)floor(_x / 16)] != 0 || _level[(int)(_y - 1) / 16][(int)ceil(_x / 16)] != 0;
+		return _level[(int)floor(_x / 16)][(int)(_y - 1) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y - 1) / 16] != 0;
 		break;
 	case Direction::DOWN:
-		return _level[(int)(_y+17) / 16][(int)floor(_x / 16)] != 0 || _level[(int)(_y+17) / 16][(int)ceil(_x / 16)] != 0;
+		return _level[(int)floor(_x / 16)][(int)(_y + 17) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y + 17) / 16] != 0;
 		break;
 	case Direction::RIGHT:
-		return _level[(int)_y / 16][(int)(_x + 17) / 16] != 0;
+		return _level[(int)(_x + 17) / 16][(int)_y / 16] != 0;
 		break;
 	case Direction::LEFT:
-		return _level[(int)_y / 16][(int)(_x - 1) / 16] != 0;
+		return _level[(int)(_x - 1) / 16][(int)_y / 16] != 0;
 		break;
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");
 		break;
+	}
+}
+
+/*Make player perform an action according to the dir
+* parameter and the player's direct environment 
+*/
+void Player::processDirection(Direction dir) {
+	if (checkCollision(dir)) {
+		pick(dir);
+	}
+	else {
+		if (_state == State::JUMP) {
+			jump(false);
+		}
+		switch (dir) {
+		case Direction::UP:
+			if (_state != State::JUMP && _state != State::FALL) {
+				jump(true);
+			}
+			break;
+		case Direction::DOWN:
+			place();
+			break;
+		case Direction::RIGHT:
+			setDirection(dir);
+			walk();
+			break;
+		case Direction::LEFT:
+			setDirection(dir);
+			walk();
+			break;
+		default:
+			throw std::runtime_error("Invalid direction in processDirection call.");
+			break;
+		}
 	}
 }
 
