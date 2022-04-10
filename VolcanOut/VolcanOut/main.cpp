@@ -81,9 +81,6 @@ int main()
             }
         }
 
-        Unbreakable ubTile(5.f, 5.f, &unbreakableTex);
-        ubTile.draw(&window);
-
         if (clock.getElapsedTime().asMilliseconds() > 80) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 player.processDirection(Direction::RIGHT);

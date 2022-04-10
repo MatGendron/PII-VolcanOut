@@ -49,14 +49,7 @@ void Player::walk() {
 	if (!checkCollision(_direction)) {
 		_x += (float)_direction * 8;
 	}
-	switch (_state) {
-	case State::JUMP:
-		jump(false);
-		break;
-	case State::FALL:
-		fall(false);
-		break;
-	default:
+	if(_state != State::JUMP && _state!=State::FALL){
 		_state = State::WALK;
 		_sprite.setTexture(_direction == Direction::LEFT ? _walkL[_walkCycle] : _walkR[_walkCycle]);
 		_walkCycle = (_walkCycle + 1) % 4;
@@ -92,7 +85,7 @@ void Player::fall(bool init){
 	if (!checkCollision(Direction::DOWN)) {
 		if (init) {
 			_state = State::FALL;
-			_vertSpeed = -6;
+			_vertSpeed = 0;
 		}
 		_sprite.setTexture(_direction == Direction::LEFT ? _fallL : _fallR);
 		_vertSpeed = max(-6.f, _vertSpeed - _gravity);
@@ -107,14 +100,35 @@ void Player::pick(Direction dir){
 	if (_state == State::IDLE || _state == State::WALK) {
 		_state = State::PICK;
 		_sprite.setTexture(_direction == Direction::LEFT ? _pickL : _pickR);
+		int x; int y;
+		switch (dir) {
+		case Direction::UP:
+			x = (int) _x / 16; y = (int)(_y - 1) / 16;
+			break;
+		case Direction::DOWN:
+			x = (int)_x / 16; y = (int)(_y + 17) / 16;
+			break;
+		case Direction::RIGHT:
+			x = (int)(_x + 17) / 16; y = (int)_y / 16;
+			break;
+		case Direction::LEFT:
+			x = (int)(_x - 1) / 16; y = (int)_y / 16;
+			break;
+		default:
+			throw std::runtime_error("Invalid direction in checkCollision call.");
+			break;
+		}
+		if (_level[x][y] == 2) {
+			_level[x][y] = 0;
+		}
 	}
-	//int x; int y;
+	
 }
 
 void Player::place() {
 	if (!checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
-		_direction == Direction::LEFT ? _level[(int)(_y + 24) / 16][(int)floor(_x / 16)] = 2 :
-			_level[(int)(_y + 24) / 16][(int)ceil(_x / 16)] = 2;
+		_direction == Direction::LEFT ? _level[(int)floor(_x / 16)][(int)(_y + 24) / 16] = 2 :
+			_level[(int)ceil(_x / 16)][(int)(_y + 24) / 16] = 2;
 	}
 }
 
@@ -145,13 +159,16 @@ bool Player::checkCollision(Direction dir) {
 * parameter and the player's direct environment 
 */
 void Player::processDirection(Direction dir) {
+	if (_state == State::JUMP) {
+		jump(false);
+	}
+	if (_state == State::FALL) {
+		fall(false);
+	}
 	if (checkCollision(dir)) {
 		pick(dir);
 	}
 	else {
-		if (_state == State::JUMP) {
-			jump(false);
-		}
 		switch (dir) {
 		case Direction::UP:
 			if (_state != State::JUMP && _state != State::FALL) {
