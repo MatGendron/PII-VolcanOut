@@ -8,8 +8,6 @@ class Breakable :Tile {
 
 public:
 	Breakable(float x, float y, sf::Texture* texture);
-
-	void draw(sf::RenderWindow* window);
 	
 	sf::Texture* getTexture() {
 		return _texture;
@@ -19,7 +17,8 @@ public:
 		_texture = texture;
 	}
 
-	void initSprite();
+	//Draw the tile on the window
+	void draw(sf::RenderWindow* window);
 
 private:
 	sf::Texture* _texture;

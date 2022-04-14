@@ -1,5 +1,4 @@
 #include "Tile.hpp"
-#include <SFML/Graphics.hpp>
 
 using namespace std;
 
