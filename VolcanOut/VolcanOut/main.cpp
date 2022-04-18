@@ -2,6 +2,7 @@
 #include "Breakable.hpp"
 #include "Unbreakable.hpp"
 #include "Player.hpp"
+#include "Lava.hpp"
 #include <iostream>
 #include <fstream>
 #define LEVEL_WIDTH 12
@@ -53,6 +54,7 @@ int main()
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
 
     //Lava initialization
+    Lava lava = Lava(1000, &lavaTex, LEVEL_HEIGHT);
 
     while (window.isOpen())
     {
@@ -103,11 +105,14 @@ int main()
             }
             clock.restart();
         }
+        lava.rise();
+        lava.draw(&window, LEVEL_WIDTH, LEVEL_HEIGHT);
         player.draw(&window);
         window.setView(view);
         window.display();
     }
 
+    //Deletion of alloted space for level
     for (int i = 0; i < LEVEL_HEIGHT; i++) {
         delete[] level[i];
     }

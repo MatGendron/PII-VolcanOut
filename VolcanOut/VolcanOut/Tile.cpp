@@ -8,8 +8,8 @@ Tile::Tile() {
 }
 
 Tile::Tile(float x, float y) {
-	_x = x*16;
-	_y = y*16;
+	_x = x*16.f;
+	_y = y*16.f;
 }
 
 
