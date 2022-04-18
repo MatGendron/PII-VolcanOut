@@ -1,15 +1,16 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Level.hpp"
 
 using namespace std;
 
 class Lava {
 public:
-	Lava(int speed, sf::Texture* texture, int levelHeight) {
-		_speed = speed;
+	Lava(sf::Texture* texture, Level* level) {
+		_speed = level->getSpeed();
 		_texture = texture;
-		_x = levelHeight*16.f;
+		_x = level->getHeight()*16.f;
 	}
 
 	//Lets the lava rise according to its speed

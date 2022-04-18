@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="Breakable.cpp" />
     <ClCompile Include="Lava.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="Breakable.hpp" />
     <ClInclude Include="Lava.hpp" />
+    <ClInclude Include="Level.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Unbreakable.hpp" />

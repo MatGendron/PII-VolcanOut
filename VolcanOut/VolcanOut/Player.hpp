@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Level.hpp"
 
 using namespace std;
 
@@ -8,7 +9,7 @@ enum class State : int {WALK, IDLE, JUMP, FALL, PICK};
 
 class Player {
 public:
-	Player(float x, float y, int** level);
+	Player(Level* level);
 
 	/*Sets the direction in of the player for use in choosing 
 	* the proper direction's sprite.
@@ -94,5 +95,5 @@ private:
 
 	float _gravity;
 
-	int** _level;
+	Level* _level;
 };

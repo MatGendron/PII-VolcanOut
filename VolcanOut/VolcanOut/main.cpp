@@ -3,6 +3,7 @@
 #include "Unbreakable.hpp"
 #include "Player.hpp"
 #include "Lava.hpp"
+#include "Level.hpp"
 #include <iostream>
 #include <fstream>
 #define LEVEL_WIDTH 12
@@ -22,39 +23,16 @@ int main()
     lavaTex.loadFromFile("Textures/Lava_tex.png");
     sf::Clock clock;
 
-    //Level reading. 
-    //Beware that the coordinates for initiliazing and reading
-    //the level (for drawing or checking collision)
-    //are reversed.
-    int** level;
-    level = new int* [LEVEL_WIDTH];
-    for (int i = 0; i < LEVEL_WIDTH; i++) {
-        level[i] = new int[LEVEL_HEIGHT];
-    }
-    
-    ifstream levelFile;
-    string line;
-    levelFile.open("Level_files/Test_level.txt");
-    if (levelFile.is_open()) {
-        int i = 0;
-        while (getline(levelFile, line)) {
-            int j = 0;
-            for (char& c : line) {
-                //Conversion of char in file into int
-                level[j][i] = c-'0'; 
-                j++;
-            }
-            i++;
-        }
-    }
+    //Level reading
+    Level level("Level_files/Test_level.txt");
 
     //Player initialization
-    Player player = Player(6, 9, level);
+    Player player = Player(&level);
 
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
 
     //Lava initialization
-    Lava lava = Lava(1000, &lavaTex, LEVEL_HEIGHT);
+    Lava lava = Lava(&lavaTex, &level);
 
     while (window.isOpen())
     {
@@ -68,7 +46,7 @@ int main()
         window.clear();
         for (int i = 0; i < LEVEL_WIDTH; i++) {
             for (int j = 0; j < LEVEL_HEIGHT; j++) {
-                switch (level[i][j]) {
+                switch (level.getLevel()[i][j]) {
                 case 1:
                 {
                     Unbreakable bTile((float)i, (float)j, &unbreakableTex);
@@ -113,10 +91,7 @@ int main()
     }
 
     //Deletion of alloted space for level
-    for (int i = 0; i < LEVEL_HEIGHT; i++) {
-        delete[] level[i];
-    }
-    delete[] level;
+    level.deleteLevel();
 
     return 0;
 }
