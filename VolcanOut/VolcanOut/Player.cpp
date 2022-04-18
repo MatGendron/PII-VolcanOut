@@ -138,16 +138,16 @@ void Player::place() {
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level[(int)floor(_x / 16)][(int)(_y - 1) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y - 1) / 16] != 0;
+		return _level[(int) (_x+8) / 16][(int)(_y - 1) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y - 1) / 16] != 0;
 		break;
 	case Direction::DOWN:
-		return _level[(int)floor(_x / 16)][(int)(_y + 17) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y + 17) / 16] != 0;
+		return _level[(int) (_x+8) / 16][(int)(_y + 17) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y + 17) / 16] != 0;
 		break;
 	case Direction::RIGHT:
-		return _level[(int)(_x + 17) / 16][(int)_y / 16] != 0;
+		return _level[(int)(_x + 17) / 16][(int) (_y+8) / 16] != 0;
 		break;
 	case Direction::LEFT:
-		return _level[(int)(_x - 1) / 16][(int)_y / 16] != 0;
+		return _level[(int)(_x - 1) / 16][(int) (_y+8) / 16] != 0;
 		break;
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");
