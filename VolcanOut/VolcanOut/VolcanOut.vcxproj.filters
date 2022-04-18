@@ -30,6 +30,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lava.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tile.hpp">
@@ -106,6 +109,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Textures\Character\walk3_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\Lava_tex.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

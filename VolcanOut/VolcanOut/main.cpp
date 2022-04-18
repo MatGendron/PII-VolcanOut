@@ -17,6 +17,8 @@ int main()
     breakableTex.loadFromFile("Textures/Breakable_tex.png");
     sf::Texture unbreakableTex;
     unbreakableTex.loadFromFile("Textures/UnBreakable_tex.png");
+    sf::Texture lavaTex;
+    lavaTex.loadFromFile("Textures/Lava_tex.png");
     sf::Clock clock;
 
     //Level reading. 
@@ -49,6 +51,8 @@ int main()
     Player player = Player(6, 9, level);
 
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
+
+    //Lava initialization
 
     while (window.isOpen())
     {

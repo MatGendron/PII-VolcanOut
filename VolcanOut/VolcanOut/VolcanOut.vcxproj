@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Breakable.cpp" />
+    <ClCompile Include="Lava.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -217,6 +218,9 @@
     </Image>
     <Image Include="Textures\Character\walk3_left.png" />
     <Image Include="Textures\Character\walk3_right.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="Textures\Lava_tex.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
     <Image Include="Textures\UnBreakable_tex.png">

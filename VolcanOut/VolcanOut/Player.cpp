@@ -23,8 +23,8 @@ Player::Player(float x, float y, int** level) {
 	_pickL.loadFromFile("Textures/Character/pick_left.png");
 	_pickR.loadFromFile("Textures/Character/pick_right.png");
 	_direction = Direction::RIGHT;
-	idle();
 	_level = level;
+	idle();
 	_gravity = 0.5;
 }
 
@@ -40,6 +40,9 @@ void Player::idle() {
 		_state = State::IDLE;
 		_sprite.setTexture(_direction == Direction::LEFT ? _idleL : _idleR);
 		_walkCycle = 0;
+		if (!checkCollision(Direction::DOWN)) {
+			fall(true);
+		}
 		break;
 	}
 	
@@ -132,16 +135,13 @@ void Player::place() {
 	}
 }
 
-/*Checks if the next tile in the Direction dir is occupied
-* Returns true if there is a tile in that direction
-*/
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level[(int) (_x+8) / 16][(int)(_y - 1) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y - 1) / 16] != 0;
+		return _level[(int)floor((_x + 7) / 16)][(int)(_y - 1) / 16] != 0 || _level[(int) floor((_x+8) / 16)][(int)(_y - 1) / 16] != 0;
 		break;
 	case Direction::DOWN:
-		return _level[(int) (_x+8) / 16][(int)(_y + 17) / 16] != 0 || _level[(int)ceil(_x / 16)][(int)(_y + 17) / 16] != 0;
+		return _level[(int)floor((_x + 7) / 16)][(int)(_y + 17) / 16] != 0 || _level[(int) floor((_x+8) / 16)][(int)(_y + 17) / 16] != 0;
 		break;
 	case Direction::RIGHT:
 		return _level[(int)(_x + 17) / 16][(int) (_y+8) / 16] != 0;
@@ -155,9 +155,7 @@ bool Player::checkCollision(Direction dir) {
 	}
 }
 
-/*Make player perform an action according to the dir
-* parameter and the player's direct environment 
-*/
+
 void Player::processDirection(Direction dir) {
 	if (_state == State::JUMP) {
 		jump(false);
