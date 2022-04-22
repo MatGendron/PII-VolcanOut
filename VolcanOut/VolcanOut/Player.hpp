@@ -1,15 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Lava.hpp"
 #include "Level.hpp"
 
 using namespace std;
 
 enum class Direction : int { LEFT=-1, RIGHT=1, UP, DOWN };
-enum class State : int {WALK, IDLE, JUMP, FALL, PICK};
+enum class State : int {WALK, IDLE, JUMP, FALL, PICK, LOSE};
 
 class Player {
 public:
-	Player(Level* level);
+	Player(Level* level, Lava* lava);
 
 	/*Sets the direction in of the player for use in choosing 
 	* the proper direction's sprite.
@@ -57,6 +58,11 @@ public:
 
 	////////////////////////////////////////////////////////
 
+	/*This method is run when the player touches the lava
+	* to display the losing screen
+	*/
+	void lose(bool init);
+
 	/*Check if the next tile in the Direction dir is occupied
 	* Returns true if there is a tile in that direction
 	*/
@@ -96,4 +102,7 @@ private:
 	float _gravity;
 
 	Level* _level;
+	Lava* _lava;
+	sf::RenderWindow* _window;
+	sf::View* _view;
 };

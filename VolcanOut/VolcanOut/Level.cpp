@@ -2,7 +2,9 @@
 
 using namespace std;
 
-Level::Level(const char* filename) {
+Level::Level(const char* filename, sf::RenderWindow* window, sf::View* view) {
+    _window = window;
+    _view = view;
     loadNew(filename);
 }
 

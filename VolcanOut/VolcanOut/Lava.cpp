@@ -2,11 +2,21 @@
 
 using namespace std;
 
+void Lava::updateParameters(Level* level) {
+	_speed = level->getSpeed();
+	_levelHeight = level->getHeight() * 16.f;
+	_x = _levelHeight;
+}
+
 void Lava::rise() {
 	if (_clock.getElapsedTime().asMilliseconds() > _speed) {
 		_x -= 8;
 		_clock.restart();
 	}
+}
+
+void Lava::reset() {
+	_x = _levelHeight;
 }
 
 void Lava::draw(sf::RenderWindow* window, int levelWidth, int levelHeight) {

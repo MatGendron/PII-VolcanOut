@@ -1,4 +1,5 @@
 #pragma once
+#include "SFML/Graphics.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -7,7 +8,7 @@ using namespace std;
 
 class Level {
 public:
-	Level(const char* filename);
+	Level(const char* filename, sf::RenderWindow* window, sf::View* view);
 
 	int getTile(int x, int y) {
 		return _level[x][y];
@@ -50,4 +51,7 @@ private:
 	int _playerStartX;
 	int _playerStartY;
 	int _lavaSpeed;
+
+	sf::RenderWindow* _window;
+	sf::View* _view;
 };

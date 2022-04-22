@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Player::Player(Level* level) {
+Player::Player(Level* level, Lava* lava) {
 	_x = level->getStartX()*16;
 	_y = level->getStartY()*16;
 	_idleL.loadFromFile("Textures/Character/idle_left.png");
@@ -23,6 +23,7 @@ Player::Player(Level* level) {
 	_pickR.loadFromFile("Textures/Character/pick_right.png");
 	_direction = Direction::RIGHT;
 	_level = level;
+	_lava = lava;
 	idle();
 	_gravity = 0.5;
 }
@@ -34,6 +35,9 @@ void Player::idle() {
 		break;
 	case State::FALL:
 		fall(false);
+		break;
+	case State::LOSE:
+		lose(false);
 		break;
 	default:
 		_state = State::IDLE;
@@ -73,6 +77,9 @@ void Player::jump(bool init){
 		_vertSpeed = max(0.0f, _vertSpeed - _gravity);
 		if (_vertSpeed > 0) {
 			_y -= _vertSpeed;
+			if (_y + 16 > _lava->getHeight()) {
+				lose(true);
+			}
 		}
 		else {
 			fall(true);
@@ -134,6 +141,13 @@ void Player::place() {
 	}
 }
 
+void Player::lose(bool init) {
+	_state = State::LOSE;
+	sf::Text text;
+	text.setString("You lose !\nPress any movement key to retry.");
+	text.setPosition(0, 0);
+}
+
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
@@ -156,6 +170,12 @@ bool Player::checkCollision(Direction dir) {
 
 
 void Player::processDirection(Direction dir) {
+	if (_state == State::LOSE) {
+		_state == State::IDLE;
+		_lava->reset();
+		_x = _level->getStartX()*16;
+		_y = _level->getStartY()*16;
+	}
 	if (_state == State::JUMP) {
 		jump(false);
 	}

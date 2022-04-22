@@ -23,16 +23,17 @@ int main()
     lavaTex.loadFromFile("Textures/Lava_tex.png");
     sf::Clock clock;
 
-    //Level reading
-    Level level("Level_files/Test_level.txt");
-
-    //Player initialization
-    Player player = Player(&level);
-
+    //View initialization
     sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
+
+    //Level reading
+    Level level("Level_files/Test_level.txt", &window, &view);
 
     //Lava initialization
     Lava lava = Lava(&lavaTex, &level);
+
+    //Player initialization
+    Player player = Player(&level, &lava);
 
     while (window.isOpen())
     {
