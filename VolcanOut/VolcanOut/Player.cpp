@@ -120,8 +120,8 @@ void Player::pick(Direction dir){
 			throw std::runtime_error("Invalid direction in checkCollision call.");
 			break;
 		}
-		if (_level->getLevel()[x][y] == 2) {
-			_level->getLevel()[x][y] = 0;
+		if (_level->getTile(x,y) == 2) {
+			_level->setTile(x,y,0);
 		}
 	}
 	
@@ -129,24 +129,24 @@ void Player::pick(Direction dir){
 
 void Player::place() {
 	if (!checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
-		_direction == Direction::LEFT ? _level->getLevel()[(int)floor(_x / 16)][(int)(_y + 24) / 16] = 2 :
-			_level->getLevel()[(int)ceil(_x / 16)][(int)(_y + 24) / 16] = 2;
+		_direction == Direction::LEFT ? _level->setTile((int)floor(_x / 16),(int)(_y + 24) / 16,2) :
+			_level->setTile((int)ceil(_x / 16),(int)(_y + 24) / 16, 2);
 	}
 }
 
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level->getLevel()[(int)floor((_x + 7) / 16)][(int)(_y - 1) / 16] != 0 || _level->getLevel()[(int) floor((_x+8) / 16)][(int)(_y - 1) / 16] != 0;
+		return _level->getTile((int)floor((_x + 7) / 16),(int)(_y - 1) / 16) != 0 || _level->getTile((int) floor((_x+8) / 16),(int)(_y - 1) / 16) != 0;
 		break;
 	case Direction::DOWN:
-		return _level->getLevel()[(int)floor((_x + 7) / 16)][(int)(_y + 17) / 16] != 0 || _level->getLevel()[(int) floor((_x+8) / 16)][(int)(_y + 17) / 16] != 0;
+		return _level->getTile((int)floor((_x + 7) / 16),(int)(_y + 17) / 16) != 0 || _level->getTile((int) floor((_x+8) / 16),(int)(_y + 17) / 16) != 0;
 		break;
 	case Direction::RIGHT:
-		return _level->getLevel()[(int)(_x + 17) / 16][(int) (_y+8) / 16] != 0;
+		return _level->getTile((int)(_x + 17) / 16,(int) (_y+8) / 16) != 0;
 		break;
 	case Direction::LEFT:
-		return _level->getLevel()[(int)(_x - 1) / 16][(int) (_y+8) / 16] != 0;
+		return _level->getTile((int)(_x - 1) / 16,(int) (_y+8) / 16) != 0;
 		break;
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");

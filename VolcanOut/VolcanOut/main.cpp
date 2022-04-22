@@ -46,7 +46,7 @@ int main()
         window.clear();
         for (int i = 0; i < LEVEL_WIDTH; i++) {
             for (int j = 0; j < LEVEL_HEIGHT; j++) {
-                switch (level.getLevel()[i][j]) {
+                switch (level.getTile(i,j)) {
                 case 1:
                 {
                     Unbreakable bTile((float)i, (float)j, &unbreakableTex);

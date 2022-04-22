@@ -9,8 +9,12 @@ class Level {
 public:
 	Level(const char* filename);
 
-	int** getLevel() {
-		return _level;
+	int getTile(int x, int y) {
+		return _level[x][y];
+	}
+
+	void setTile(int x, int y, int val) {
+		_level[x][y] = val;
 	}
 
 	int getStartX() {
