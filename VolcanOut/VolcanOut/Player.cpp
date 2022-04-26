@@ -29,8 +29,8 @@ Player::Player(Level* level, Lava* lava) {
 }
 
 void Player::idle() {
-	if (_y + 16 > _lava->getHeight()) {
-		lose(true);
+	if (_state != State::LOSE && _y + 16 > _lava->getHeight()) {
+		lose();
 	}
 	switch (_state) {
 	case State::JUMP:
@@ -40,7 +40,6 @@ void Player::idle() {
 		fall(false);
 		break;
 	case State::LOSE:
-		lose(false);
 		break;
 	default:
 		_state = State::IDLE;
@@ -141,32 +140,47 @@ void Player::place() {
 	}
 }
 
-void Player::lose(bool init) {
+void Player::lose() {
 	_state = State::LOSE;
-	sf::Font font;
-	font.loadFromFile("Fonts/Roboto-Bold.ttf");
-	sf::Text text;
-	text.setFont(font);
-	text.setString("You lose !\nPress any movement key to retry.");
-	text.setCharacterSize(24);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(sf::Vector2f(96.f, 80.f));
-	_level->getWindow()->draw(text);
+	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
+		throw std::runtime_error("Couldn't load font for game over screen.");
+	}
+	_message.setFont(_font);
+	_message.setString("                    You lose!\nPress any movement key to retry.");
+	_message.setCharacterSize(6);
+	_message.setFillColor(sf::Color::Green);
+	sf::FloatRect messageRect = _message.getLocalBounds();
+	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
+	_message.setPosition(sf::Vector2f(_level->getWidth()*8.f, _level->getHeight() * 8.f));
 }
 
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		return _level->getTile((int)floor((_x + 7) / 16),(int)(_y - 1) / 16) != 0 || _level->getTile((int) floor((_x+8) / 16),(int)(_y - 1) / 16) != 0;
+		int tileUpLeft;
+		int tileUpRight;
+		tileUpLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y - 1) / 16);
+		tileUpRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y - 1) / 16);
+		return (tileUpLeft != 0 || tileUpRight != 0) &&
+			(tileUpLeft != 3 || tileUpRight != 3);
 		break;
 	case Direction::DOWN:
-		return _level->getTile((int)floor((_x + 7) / 16),(int)(_y + 17) / 16) != 0 || _level->getTile((int) floor((_x+8) / 16),(int)(_y + 17) / 16) != 0;
+		int tileDownLeft;
+		int tileDownRight;
+		tileDownLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y + 17) / 16);
+		tileDownRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y + 17) / 16);
+		return (tileDownLeft != 0 || tileDownRight != 0) &&
+			(tileDownLeft != 3 || tileDownRight != 3);
 		break;
 	case Direction::RIGHT:
-		return _level->getTile((int)(_x + 17) / 16,(int) (_y+8) / 16) != 0;
+		int tileRight;
+		tileRight = _level->getTile((int)(_x + 17) / 16, (int)(_y + 8) / 16);
+		return tileRight != 0 && tileRight != 3;
 		break;
 	case Direction::LEFT:
-		return _level->getTile((int)(_x - 1) / 16,(int) (_y+8) / 16) != 0;
+		int tileLeft;
+		tileLeft = _level->getTile((int)(_x - 1) / 16, (int)(_y + 8) / 16);
+		return tileLeft != 0 && tileLeft != 3;
 		break;
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");
@@ -216,11 +230,14 @@ void Player::processDirection(Direction dir) {
 		}
 	}
 	if (_y + 16 > _lava->getHeight()) {
-		lose(true);
+		lose();
 	}
 }
 
 void Player::draw(sf::RenderWindow* window) {
 	_sprite.setPosition(_x, _y);
 	window->draw(_sprite);
+	if (_state == State::LOSE) {
+		window->draw(_message);
+	}
 }

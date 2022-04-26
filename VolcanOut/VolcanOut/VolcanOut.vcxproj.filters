@@ -125,5 +125,8 @@
     <Font Include="Fonts\Roboto-Bold.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+    <Font Include="Fonts\Retro Gaming.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>

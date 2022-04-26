@@ -61,7 +61,7 @@ public:
 	/*This method is run when the player touches the lava
 	* to display the losing screen
 	*/
-	void lose(bool init);
+	void lose();
 
 	/*Check if the next tile in the Direction dir is occupied
 	* Returns true if there is a tile in that direction
@@ -100,6 +100,9 @@ private:
 	float _vertSpeed;
 
 	float _gravity;
+
+	sf::Font _font;
+	sf::Text _message;
 
 	Level* _level;
 	Lava* _lava;
