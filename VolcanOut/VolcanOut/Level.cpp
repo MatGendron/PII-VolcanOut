@@ -8,7 +8,7 @@ Level::Level(const char* filename, sf::RenderWindow* window, sf::View* view) {
     loadNew(filename);
 }
 
-/*Beware that the coordinates for initiliazingand reading
+/*Beware that the coordinates for initiliazing and reading
 * the level (for drawing or checking collision)
 * are reversed.
 */
@@ -19,6 +19,8 @@ void Level::loadNew(const char* filename) {
     if (levelFile.is_open()) {
         getline(levelFile, line);
         loadMetaData(line);
+        getline(levelFile, line);
+        _nextLevel = line;
         _level = new int* [_levelWidth];
         _levelInit = new int* [_levelWidth];
         for (int i = 0; i < _levelWidth; i++) {
@@ -62,6 +64,16 @@ void Level::reset() {
         for (int j = 0; j < _levelHeight; j++) {
             _level[i][j] = _levelInit[i][j];
         }
+    }
+}
+
+bool Level::nextLevel() {
+    if (_nextLevel.compare("WIN")==0) {
+        return false;
+    }
+    else {
+        loadNew(_nextLevel.c_str());
+        return true;
     }
 }
 

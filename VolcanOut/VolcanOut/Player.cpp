@@ -41,6 +41,8 @@ void Player::idle() {
 		break;
 	case State::LOSE:
 		break;
+	case State::WIN:
+		break;
 	default:
 		_state = State::IDLE;
 		_sprite.setTexture(_direction == Direction::LEFT ? _idleL : _idleR);
@@ -146,7 +148,9 @@ void Player::lose() {
 		throw std::runtime_error("Couldn't load font for game over screen.");
 	}
 	_message.setFont(_font);
-	_message.setString("                    You lose!\nPress any movement key to retry.");
+	_message.setString(
+		"                     You lose!\n"
+		"Press any movement key to retry.");
 	_message.setCharacterSize(6);
 	_message.setFillColor(sf::Color::Green);
 	sf::FloatRect messageRect = _message.getLocalBounds();
@@ -154,34 +158,52 @@ void Player::lose() {
 	_message.setPosition(sf::Vector2f(_level->getWidth()*8.f, _level->getHeight() * 8.f));
 }
 
+void Player::win() {
+	_state = State::WIN;
+	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
+		throw std::runtime_error("Couldn't load font for game over screen.");
+	}
+	_message.setFont(_font);
+	_message.setString(
+		"                      You Win!\n"
+		"Press any movement key to retry.");
+	_message.setCharacterSize(6);
+	_message.setFillColor(sf::Color::Green);
+	sf::FloatRect messageRect = _message.getLocalBounds();
+	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
+	_message.setPosition(sf::Vector2f(_level->getWidth() * 8.f, _level->getHeight() * 8.f));
+}
+
 bool Player::checkCollision(Direction dir) {
 	switch (dir) {
 	case Direction::UP:
-		int tileUpLeft;
-		int tileUpRight;
-		tileUpLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y - 1) / 16);
-		tileUpRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y - 1) / 16);
+	{
+		int tileUpLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y - 1) / 16);
+		int tileUpRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y - 1) / 16);
 		return (tileUpLeft != 0 || tileUpRight != 0) &&
 			(tileUpLeft != 3 || tileUpRight != 3);
 		break;
+	}
 	case Direction::DOWN:
-		int tileDownLeft;
-		int tileDownRight;
-		tileDownLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y + 17) / 16);
-		tileDownRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y + 17) / 16);
+	{
+		int tileDownLeft = _level->getTile((int)floor((_x + 7) / 16), (int)(_y + 17) / 16);
+		int tileDownRight = _level->getTile((int)floor((_x + 8) / 16), (int)(_y + 17) / 16);
 		return (tileDownLeft != 0 || tileDownRight != 0) &&
 			(tileDownLeft != 3 || tileDownRight != 3);
 		break;
+	}
 	case Direction::RIGHT:
-		int tileRight;
-		tileRight = _level->getTile((int)(_x + 17) / 16, (int)(_y + 8) / 16);
+	{
+		int tileRight = _level->getTile((int)(_x + 17) / 16, (int)(_y + 8) / 16);
 		return tileRight != 0 && tileRight != 3;
 		break;
+	}
 	case Direction::LEFT:
-		int tileLeft;
-		tileLeft = _level->getTile((int)(_x - 1) / 16, (int)(_y + 8) / 16);
+	{
+		int tileLeft = _level->getTile((int)(_x - 1) / 16, (int)(_y + 8) / 16);
 		return tileLeft != 0 && tileLeft != 3;
 		break;
+	}
 	default:
 		throw std::runtime_error("Invalid direction in checkCollision call.");
 		break;
@@ -190,12 +212,22 @@ bool Player::checkCollision(Direction dir) {
 
 
 void Player::processDirection(Direction dir) {
-	if (_state == State::LOSE) {
+	if (_state == State::LOSE || _state==State::WIN) {
 		_state == State::IDLE;
 		_lava->reset();
 		_level->reset();
 		_x = _level->getStartX()*16;
 		_y = _level->getStartY()*16;
+	}
+	if (dir == Direction::UP && _level->getTile((int)(_x + 8) / 16, (int)(_y + 8) / 16) == 3) {
+		if (!_level->nextLevel()) {
+			win();
+		}
+		else {
+			_x = _level->getStartX() * 16;
+			_y = _level->getStartY() * 16;
+			_lava->updateParameters(_level);
+		}
 	}
 	if (_state == State::JUMP) {
 		jump(false);
@@ -237,7 +269,7 @@ void Player::processDirection(Direction dir) {
 void Player::draw(sf::RenderWindow* window) {
 	_sprite.setPosition(_x, _y);
 	window->draw(_sprite);
-	if (_state == State::LOSE) {
+	if (_state == State::LOSE ||_state==State::WIN) {
 		window->draw(_message);
 	}
 }

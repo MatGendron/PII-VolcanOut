@@ -6,7 +6,7 @@
 using namespace std;
 
 enum class Direction : int { LEFT=-1, RIGHT=1, UP, DOWN };
-enum class State : int {WALK, IDLE, JUMP, FALL, PICK, LOSE};
+enum class State : int {WALK, IDLE, JUMP, FALL, PICK, LOSE, WIN};
 
 class Player {
 public:
@@ -62,6 +62,11 @@ public:
 	* to display the losing screen
 	*/
 	void lose();
+
+	/*This method is run when the player enters the door of the
+	* last level to display the winning screen
+	*/
+	void win();
 
 	/*Check if the next tile in the Direction dir is occupied
 	* Returns true if there is a tile in that direction

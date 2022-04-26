@@ -38,15 +38,13 @@ public:
 		return _lavaSpeed;
 	}
 
-	sf::RenderWindow* getWindow() {
-		return _window;
-	}
-
 	void loadNew(const char* filename);
 
 	void loadMetaData(string line);
 
 	void reset();
+
+	bool nextLevel();
 
 	void deleteLevel();
 
@@ -58,6 +56,7 @@ private:
 	int _playerStartX;
 	int _playerStartY;
 	int _lavaSpeed;
+	string _nextLevel;
 
 	sf::RenderWindow* _window;
 	sf::View* _view;

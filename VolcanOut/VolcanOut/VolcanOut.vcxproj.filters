@@ -36,6 +36,9 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tile.hpp">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Level.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -120,12 +126,12 @@
     <Image Include="Textures\Lava_tex.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\Door_Tex.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Fonts\Roboto-Bold.ttf">
-      <Filter>Resource Files</Filter>
-    </Font>
-    <Font Include="Fonts\Retro Gaming.ttf">
+    <Font Include="Fonts\8-bit-pusab.ttf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

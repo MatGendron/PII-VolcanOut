@@ -10,7 +10,6 @@ public:
 	Tile(float x, float y);
 
 protected:
-	static sf::Texture texture;
 	float _x;
 	float _y;
 };

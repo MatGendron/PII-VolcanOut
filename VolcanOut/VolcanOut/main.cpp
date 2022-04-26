@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Breakable.hpp"
 #include "Unbreakable.hpp"
+#include "Door.hpp"
 #include "Player.hpp"
 #include "Lava.hpp"
 #include "Level.hpp"
@@ -21,6 +22,8 @@ int main()
     unbreakableTex.loadFromFile("Textures/UnBreakable_tex.png");
     sf::Texture lavaTex;
     lavaTex.loadFromFile("Textures/Lava_tex.png");
+    sf::Texture doorTex;
+    doorTex.loadFromFile("Textures/Door_Tex.png");
     sf::Clock clock;
 
     //View initialization
@@ -58,6 +61,12 @@ int main()
                 {
                     Breakable ubTile((float)i, (float)j, &breakableTex);
                     ubTile.draw(&window);
+                    break;
+                }
+                case 3:
+                {
+                    Door dTile((float)i, (float)j, &doorTex);
+                    dTile.draw(&window);
                     break;
                 }
                 default:
