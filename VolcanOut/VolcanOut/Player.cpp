@@ -119,22 +119,25 @@ void Player::fall(bool init){
 }
 
 void Player::pick(Direction dir){
+	if (_clock.getElapsedTime().asMilliseconds() < 300) {
+		return;
+	}
 	if (_state == State::IDLE || _state == State::WALK) {
 		_state = State::PICK;
 		_sprite.setTexture(_direction == Direction::LEFT ? _pickL : _pickR);
 		int x; int y;
 		switch (dir) {
 		case Direction::UP:
-			x = (int) _x / 16; y = (int)(_y - 1) / 16;
+			x = (int) (_x+8) / 16; y = (int)(_y - 1) / 16;
 			break;
 		case Direction::DOWN:
-			x = (int)_x / 16; y = (int)(_y + 17) / 16;
+			x = (int) (_x+8) / 16; y = (int)(_y + 17) / 16;
 			break;
 		case Direction::RIGHT:
-			x = (int)(_x + 17) / 16; y = (int)_y / 16;
+			x = (int)(_x + 17) / 16; y = (int) (_y+8) / 16;
 			break;
 		case Direction::LEFT:
-			x = (int)(_x - 1) / 16; y = (int)_y / 16;
+			x = (int)(_x - 1) / 16; y = (int) (_y+8) / 16;
 			break;
 		default:
 			throw std::runtime_error("Invalid direction in checkCollision call.");
@@ -144,17 +147,24 @@ void Player::pick(Direction dir){
 			_level->setTile(x,y,0);
 			_blockCount += 1;
 			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			if (!checkCollision(Direction::DOWN)) {
+				_state = State::FALL;
+				_clock.restart();
+			}
 		}
 	}
 	
 }
 
 void Player::place() {
-	if (_blockCount > 0 && !checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
+	if (_clock.getElapsedTime().asMilliseconds()>300 &&
+		_blockCount > 0 && !checkCollision(Direction::DOWN) && 
+		(_state == State::JUMP || _state == State::FALL)) {
 		_direction == Direction::LEFT ? _level->setTile((int)floor(_x / 16),(int)(_y + 24) / 16,2) :
 			_level->setTile((int)ceil(_x / 16),(int)(_y + 24) / 16, 2);
 		_blockCount -= 1;
 		_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+		_clock.restart();
 	}
 }
 
@@ -172,6 +182,7 @@ void Player::lose() {
 	sf::FloatRect messageRect = _message.getLocalBounds();
 	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
 	_message.setPosition(sf::Vector2f(_level->getWidth()*8.f, _level->getHeight() * 8.f));
+	_clock.restart();
 }
 
 void Player::win() {
@@ -188,6 +199,7 @@ void Player::win() {
 	sf::FloatRect messageRect = _message.getLocalBounds();
 	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
 	_message.setPosition(sf::Vector2f(_level->getWidth() * 8.f, _level->getHeight() * 8.f));
+	_clock.restart();
 }
 
 bool Player::checkCollision(Direction dir) {
@@ -228,13 +240,18 @@ bool Player::checkCollision(Direction dir) {
 
 
 void Player::processDirection(Direction dir) {
-	if (_state == State::LOSE || _state==State::WIN) {
-		_state == State::IDLE;
-		_lava->reset();
-		_level->reset();
-		_x = _level->getStartX()*16;
-		_y = _level->getStartY()*16;
-		_blockCount = _level->getBlockCount();
+	if (_state == State::LOSE || _state == State::WIN) {
+		if (_clock.getElapsedTime().asMilliseconds() < 500) {
+			return;
+		}
+		else {
+			_state == State::IDLE;
+			_lava->reset();
+			_level->reset();
+			_x = _level->getStartX() * 16;
+			_y = _level->getStartY() * 16;
+			_blockCount = _level->getBlockCount();
+		}
 	}
 	if (dir == Direction::UP && _level->getTile((int)(_x + 8) / 16, (int)(_y + 8) / 16) == 3) {
 		if (!_level->nextLevel()) {

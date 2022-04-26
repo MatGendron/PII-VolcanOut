@@ -105,6 +105,8 @@ private:
 	sf::Sprite _blockCounterSpt;
 	sf::Text _blockCounterTxt;
 
+	sf::Clock _clock;
+
 	int _walkCycle;
 	float _vertSpeed;
 
