@@ -160,11 +160,19 @@ void Player::place() {
 	if (_clock.getElapsedTime().asMilliseconds()>300 &&
 		_blockCount > 0 && !checkCollision(Direction::DOWN) && 
 		(_state == State::JUMP || _state == State::FALL)) {
-		_direction == Direction::LEFT ? _level->setTile((int)floor(_x / 16),(int)(_y + 24) / 16,2) :
-			_level->setTile((int)ceil(_x / 16),(int)(_y + 24) / 16, 2);
-		_blockCount -= 1;
-		_blockCounterTxt.setString("X " + std::to_string(_blockCount));
-		_clock.restart();
+		int x; int y;
+		if (_direction == Direction::LEFT) {
+			x = (int)floor(_x / 16); y = (int)(_y + 24) / 16;
+		}
+		else {
+			x = (int)ceil(_x / 16); y = (int)(_y + 24) / 16;
+		}
+		if (_level->getTile(x, y) == 0) {
+			_level->setTile(x, y, 2);
+			_blockCount -= 1;
+			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			_clock.restart();
+		}
 	}
 }
 
