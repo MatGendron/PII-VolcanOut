@@ -20,8 +20,10 @@ void Level::loadNew(const char* filename) {
         getline(levelFile, line);
         loadMetaData(line);
         _level = new int* [_levelWidth];
+        _levelInit = new int* [_levelWidth];
         for (int i = 0; i < _levelWidth; i++) {
             _level[i] = new int[_levelHeight];
+            _levelInit[i] = new int[_levelHeight];
         }
         int i = 0;
         while (getline(levelFile, line)) {
@@ -29,6 +31,7 @@ void Level::loadNew(const char* filename) {
             for (char& c : line) {
                 //Conversion of char in file into int
                 _level[j][i] = c - '0';
+                _levelInit[j][i] = c - '0';
                 j++;
             }
             i++;
@@ -54,10 +57,20 @@ void Level::loadMetaData(string line) {
     _lavaSpeed = metaData[4];
 }
 
+void Level::reset() {
+    for (int i = 0; i < _levelWidth; i++) {
+        for (int j = 0; j < _levelHeight; j++) {
+            _level[i][j] = _levelInit[i][j];
+        }
+    }
+}
+
 void Level::deleteLevel() {
-    for (int i = 0; i < _levelHeight; i++) {
+    for (int i = 0; i < _levelWidth; i++) {
         delete[] _level[i];
+        delete[] _levelInit[i];
     }
     delete[] _level;
+    delete[] _levelInit;
 }
 

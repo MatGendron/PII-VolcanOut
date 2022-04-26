@@ -29,6 +29,9 @@ Player::Player(Level* level, Lava* lava) {
 }
 
 void Player::idle() {
+	if (_y + 16 > _lava->getHeight()) {
+		lose(true);
+	}
 	switch (_state) {
 	case State::JUMP:
 		jump(false);
@@ -77,9 +80,6 @@ void Player::jump(bool init){
 		_vertSpeed = max(0.0f, _vertSpeed - _gravity);
 		if (_vertSpeed > 0) {
 			_y -= _vertSpeed;
-			if (_y + 16 > _lava->getHeight()) {
-				lose(true);
-			}
 		}
 		else {
 			fall(true);
@@ -143,9 +143,15 @@ void Player::place() {
 
 void Player::lose(bool init) {
 	_state = State::LOSE;
+	sf::Font font;
+	font.loadFromFile("Fonts/Roboto-Bold.ttf");
 	sf::Text text;
+	text.setFont(font);
 	text.setString("You lose !\nPress any movement key to retry.");
-	text.setPosition(0, 0);
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(sf::Vector2f(96.f, 80.f));
+	_level->getWindow()->draw(text);
 }
 
 bool Player::checkCollision(Direction dir) {
@@ -173,6 +179,7 @@ void Player::processDirection(Direction dir) {
 	if (_state == State::LOSE) {
 		_state == State::IDLE;
 		_lava->reset();
+		_level->reset();
 		_x = _level->getStartX()*16;
 		_y = _level->getStartY()*16;
 	}
@@ -207,6 +214,9 @@ void Player::processDirection(Direction dir) {
 			throw std::runtime_error("Invalid direction in processDirection call.");
 			break;
 		}
+	}
+	if (_y + 16 > _lava->getHeight()) {
+		lose(true);
 	}
 }
 
