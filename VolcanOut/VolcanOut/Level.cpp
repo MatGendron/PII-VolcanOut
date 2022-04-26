@@ -42,7 +42,7 @@ void Level::loadNew(const char* filename) {
 }
 
 void Level::loadMetaData(string line) {
-    int metaData[5] = { -1, -1, -1, -1, -1 };
+    int metaData[6] = { -1, -1, -1, -1, -1, -1 };
     int start = 0;
     int end = line.find(' ');
     int i = 0;
@@ -57,6 +57,7 @@ void Level::loadMetaData(string line) {
     _playerStartX = metaData[2];
     _playerStartY = metaData[3];
     _lavaSpeed = metaData[4];
+    _startingBlockCount = metaData[5];
 }
 
 void Level::reset() {

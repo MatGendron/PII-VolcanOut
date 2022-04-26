@@ -175,6 +175,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\BlockCount_Tex.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
     <Image Include="Textures\Breakable_tex.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

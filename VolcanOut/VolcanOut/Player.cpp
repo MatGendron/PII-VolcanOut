@@ -5,6 +5,7 @@ using namespace std;
 Player::Player(Level* level, Lava* lava) {
 	_x = level->getStartX()*16;
 	_y = level->getStartY()*16;
+	_blockCount = level->getBlockCount();
 	_idleL.loadFromFile("Textures/Character/idle_left.png");
 	_idleR.loadFromFile("Textures/Character/idle_right.png");
 	_jumpL.loadFromFile("Textures/Character/jump_left.png");
@@ -21,6 +22,17 @@ Player::Player(Level* level, Lava* lava) {
 	_walkR[3].loadFromFile("Textures/Character/walk3_right.png");
 	_pickL.loadFromFile("Textures/Character/pick_left.png");
 	_pickR.loadFromFile("Textures/Character/pick_right.png");
+	_blockCounterTex.loadFromFile("Textures/BlockCount_Tex.png");
+	_blockCounterSpt.setTexture(_blockCounterTex);
+	_blockCounterSpt.setPosition(0, -16);
+	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
+		throw std::runtime_error("Couldn't load font for block counter.");
+	}
+	_blockCounterTxt.setFont(_font);
+	_blockCounterTxt.setCharacterSize(6);
+	_blockCounterTxt.setFillColor(sf::Color::White);
+	_blockCounterTxt.setPosition(16, -8);
+	_blockCounterTxt.setString("X "+ std::to_string(_blockCount));
 	_direction = Direction::RIGHT;
 	_level = level;
 	_lava = lava;
@@ -130,15 +142,19 @@ void Player::pick(Direction dir){
 		}
 		if (_level->getTile(x,y) == 2) {
 			_level->setTile(x,y,0);
+			_blockCount += 1;
+			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
 		}
 	}
 	
 }
 
 void Player::place() {
-	if (!checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
+	if (_blockCount > 0 && !checkCollision(Direction::DOWN) && (_state == State::JUMP || _state == State::FALL)) {
 		_direction == Direction::LEFT ? _level->setTile((int)floor(_x / 16),(int)(_y + 24) / 16,2) :
 			_level->setTile((int)ceil(_x / 16),(int)(_y + 24) / 16, 2);
+		_blockCount -= 1;
+		_blockCounterTxt.setString("X " + std::to_string(_blockCount));
 	}
 }
 
@@ -161,7 +177,7 @@ void Player::lose() {
 void Player::win() {
 	_state = State::WIN;
 	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
-		throw std::runtime_error("Couldn't load font for game over screen.");
+		throw std::runtime_error("Couldn't load font for game win screen.");
 	}
 	_message.setFont(_font);
 	_message.setString(
@@ -218,6 +234,7 @@ void Player::processDirection(Direction dir) {
 		_level->reset();
 		_x = _level->getStartX()*16;
 		_y = _level->getStartY()*16;
+		_blockCount = _level->getBlockCount();
 	}
 	if (dir == Direction::UP && _level->getTile((int)(_x + 8) / 16, (int)(_y + 8) / 16) == 3) {
 		if (!_level->nextLevel()) {
@@ -272,4 +289,6 @@ void Player::draw(sf::RenderWindow* window) {
 	if (_state == State::LOSE ||_state==State::WIN) {
 		window->draw(_message);
 	}
+	window->draw(_blockCounterSpt);
+	window->draw(_blockCounterTxt);
 }

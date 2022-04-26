@@ -129,6 +129,9 @@
     <Image Include="Textures\Door_Tex.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Textures\BlockCount_Tex.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Fonts\8-bit-pusab.ttf">

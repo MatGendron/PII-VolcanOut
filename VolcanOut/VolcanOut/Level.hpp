@@ -38,6 +38,10 @@ public:
 		return _lavaSpeed;
 	}
 
+	int getBlockCount() {
+		return _startingBlockCount;
+	}
+
 	void loadNew(const char* filename);
 
 	void loadMetaData(string line);
@@ -56,6 +60,7 @@ private:
 	int _playerStartX;
 	int _playerStartY;
 	int _lavaSpeed;
+	int _startingBlockCount;
 	string _nextLevel;
 
 	sf::RenderWindow* _window;

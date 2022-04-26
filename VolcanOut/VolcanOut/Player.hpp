@@ -101,10 +101,16 @@ private:
 
 	sf::Sprite _sprite;
 
+	sf::Texture _blockCounterTex;
+	sf::Sprite _blockCounterSpt;
+	sf::Text _blockCounterTxt;
+
 	int _walkCycle;
 	float _vertSpeed;
 
 	float _gravity;
+
+	int _blockCount;
 
 	sf::Font _font;
 	sf::Text _message;
