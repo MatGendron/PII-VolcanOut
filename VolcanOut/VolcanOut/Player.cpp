@@ -32,7 +32,7 @@ Player::Player(Level* level, Lava* lava) {
 	_blockCounterTxt.setCharacterSize(6);
 	_blockCounterTxt.setFillColor(sf::Color::White);
 	_blockCounterTxt.setPosition(16, -8);
-	_blockCounterTxt.setString("X "+ std::to_string(_blockCount));
+	_blockCounterTxt.setString(" X "+ std::to_string(_blockCount));
 	_direction = Direction::RIGHT;
 	_level = level;
 	_lava = lava;
@@ -144,7 +144,7 @@ void Player::pick(Direction dir){
 		if (_level->getTile(x,y) == 2) {
 			_level->setTile(x,y,0);
 			_blockCount += 1;
-			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			_blockCounterTxt.setString(" X " + std::to_string(_blockCount));
 			if (!checkCollision(Direction::DOWN)) {
 				_state = State::FALL;
 				_clock.restart();
@@ -168,7 +168,7 @@ void Player::place() {
 		if (_level->getTile(x, y) == 0) {
 			_level->setTile(x, y, 2);
 			_blockCount -= 1;
-			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			_blockCounterTxt.setString(" X " + std::to_string(_blockCount));
 			_clock.restart();
 		}
 	}
@@ -182,7 +182,7 @@ void Player::message(string msg, unsigned int size) {
 	_message.setFont(_font);
 	_message.setString(msg);
 	_message.setCharacterSize(size);
-	_message.setFillColor(sf::Color::Green);
+	_message.setFillColor(sf::Color::Yellow);
 	sf::FloatRect messageRect = _message.getLocalBounds();
 	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
 	_message.setPosition(sf::Vector2f(_level->getWidth() * 8.f, _level->getHeight() * 8.f));
@@ -267,7 +267,7 @@ void Player::processDirection(Direction dir) {
 			_x = _level->getStartX() * 16;
 			_y = _level->getStartY() * 16;
 			_blockCount = _level->getBlockCount();
-			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			_blockCounterTxt.setString(" X " + std::to_string(_blockCount));
 		}
 	}
 	if (dir == Direction::UP && _level->getTile((int)(_x + 8) / 16, (int)(_y + 8) / 16) == 3) {
@@ -279,7 +279,7 @@ void Player::processDirection(Direction dir) {
 			_y = _level->getStartY() * 16;
 			_lava->updateParameters(_level);
 			_blockCount = _level->getBlockCount();
-			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
+			_blockCounterTxt.setString(" X " + std::to_string(_blockCount));
 		}
 	}
 	if (_state == State::JUMP) {

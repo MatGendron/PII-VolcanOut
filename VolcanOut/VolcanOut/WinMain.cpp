@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int main()
+int WinMain()
 {
     //Window and textures initializations
     sf::RenderWindow window(sf::VideoMode(800, 800), "VolcanOut");
