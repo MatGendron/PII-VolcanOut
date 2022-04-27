@@ -7,8 +7,6 @@
 #include "Level.hpp"
 #include <iostream>
 #include <fstream>
-#define LEVEL_WIDTH 12
-#define LEVEL_HEIGHT 11
 
 using namespace std;
 
@@ -33,10 +31,10 @@ int WinMain()
     Level level("Level_files/Level1.txt", &window, &view);
 
     //Lava initialization
-    Lava lava = Lava(&lavaTex, &level);
+    Lava lava(&lavaTex, &level);
 
     //Player initialization
-    Player player = Player(&level, &lava);
+    Player player(&level, &lava);
 
     while (window.isOpen())
     {
@@ -48,8 +46,8 @@ int WinMain()
         }
 
         window.clear();
-        for (int i = 0; i < LEVEL_WIDTH; i++) {
-            for (int j = 0; j < LEVEL_HEIGHT; j++) {
+        for (int i = 0; i < level.getWidth(); i++) {
+            for (int j = 0; j < level.getHeight(); j++) {
                 switch (level.getTile(i,j)) {
                 case 1:
                 {
@@ -94,7 +92,7 @@ int WinMain()
             clock.restart();
         }
         lava.rise();
-        lava.draw(&window, LEVEL_WIDTH, LEVEL_HEIGHT);
+        lava.draw(&window, level.getWidth(), level.getHeight());
         player.draw(&window);
         window.setView(view);
         window.display();

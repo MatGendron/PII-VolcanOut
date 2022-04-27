@@ -17,6 +17,9 @@ void Level::loadNew(const char* filename) {
     string line;
     levelFile.open(filename);
     if (levelFile.is_open()) {
+        if (string(filename) != "Level_files/Level1.txt") {
+            deleteLevel();
+        }
         getline(levelFile, line);
         loadMetaData(line);
         getline(levelFile, line);
