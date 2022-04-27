@@ -112,6 +112,7 @@ void Player::fall(bool init){
 		_y -= _vertSpeed;
 	}
 	else {
+		_y = round(_y / 16) * 16;
 		_state = State::IDLE;
 	}
 }
@@ -280,6 +281,7 @@ void Player::processDirection(Direction dir) {
 			_lava->updateParameters(_level);
 			_blockCount = _level->getBlockCount();
 			_blockCounterTxt.setString(" X " + std::to_string(_blockCount));
+			return;
 		}
 	}
 	if (_state == State::JUMP) {

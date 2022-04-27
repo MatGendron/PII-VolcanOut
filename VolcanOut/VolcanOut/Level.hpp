@@ -42,14 +42,30 @@ public:
 		return _startingBlockCount;
 	}
 
+	/*Loads a new level from a file
+	*/
 	void loadNew(const char* filename);
 
+	/*Loads the meta data contained within a line of
+	* level file.
+	* Said metadata is comprised of:
+	* - level width and height
+	* - player's starting coordinates
+	* - frequency at which the lava rises
+	* - number of blocks the player starts with
+	*/
 	void loadMetaData(string line);
 
+	/*Resets a level to its original state
+	*/
 	void reset();
 
+	/*Loads the next level or triggers the game winning screen
+	*/
 	bool nextLevel();
 
+	/*Deletes the dynamically allocated _level and _levelInit fields
+	*/
 	void deleteLevel();
 
 private:

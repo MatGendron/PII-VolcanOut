@@ -64,11 +64,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Level_files\Test_level.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="Textures\Breakable_tex.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -137,5 +132,16 @@
     <Font Include="Fonts\8-bit-pusab.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Level_files\Level1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Level_files\Level2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Level_files\Level3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
