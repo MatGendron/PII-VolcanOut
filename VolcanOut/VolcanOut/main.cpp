@@ -27,10 +27,10 @@ int main()
     sf::Clock clock;
 
     //View initialization
-    sf::View view(sf::Vector2f(96.f, 80.f), sf::Vector2f(192.f, 190.f));
+    sf::View view;
 
     //Level reading
-    Level level("Level_files/Test_level.txt", &window, &view);
+    Level level("Level_files/Level1.txt", &window, &view);
 
     //Lava initialization
     Lava lava = Lava(&lavaTex, &level);

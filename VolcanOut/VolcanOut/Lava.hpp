@@ -12,10 +12,15 @@ public:
 		_texture = texture;
 		_levelHeight = level->getHeight() * 16.f;
 		_x = _levelHeight;
+		_rising = true;
 	}
 
 	float getHeight() {
 		return _x;
+	}
+
+	void setRising(bool rising) {
+		_rising = rising;
 	}
 
 	/*Used to update the lava parameters when 
@@ -37,6 +42,7 @@ private:
 	float _x;
 	int _speed;
 	float _levelHeight;
+	bool _rising;
 	sf::Texture* _texture;
 	sf::Clock _clock;
 };

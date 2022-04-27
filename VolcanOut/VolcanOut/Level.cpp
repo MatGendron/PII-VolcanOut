@@ -15,7 +15,7 @@ Level::Level(const char* filename, sf::RenderWindow* window, sf::View* view) {
 void Level::loadNew(const char* filename) {
     ifstream levelFile;
     string line;
-    levelFile.open("Level_files/Test_level.txt");
+    levelFile.open(filename);
     if (levelFile.is_open()) {
         getline(levelFile, line);
         loadMetaData(line);
@@ -38,6 +38,8 @@ void Level::loadNew(const char* filename) {
             }
             i++;
         }
+        _view->setCenter(sf::Vector2f(_levelWidth * 8.f, (_levelHeight-1) * 8.f));
+        _view->setSize(sf::Vector2f(_levelWidth * 16.f, (_levelHeight+1) * 16.f));
     }
 }
 

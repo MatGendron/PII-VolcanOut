@@ -6,7 +6,7 @@
 using namespace std;
 
 enum class Direction : int { LEFT=-1, RIGHT=1, UP, DOWN };
-enum class State : int {WALK, IDLE, JUMP, FALL, PICK, LOSE, WIN};
+enum class State : int {WALK, IDLE, JUMP, FALL, PICK, MESG};
 
 class Player {
 public:
@@ -57,6 +57,14 @@ public:
 	void place();
 
 	////////////////////////////////////////////////////////
+
+	/*This method is used to display a message on the game's screen
+	*/
+	void message(string msg, unsigned int size);
+
+	/*This method is used to display the instructions at the start of the game
+	*/
+	void instructions();
 
 	/*This method is run when the player touches the lava
 	* to display the losing screen

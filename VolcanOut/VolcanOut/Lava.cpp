@@ -9,7 +9,7 @@ void Lava::updateParameters(Level* level) {
 }
 
 void Lava::rise() {
-	if (_clock.getElapsedTime().asMilliseconds() > _speed) {
+	if (_rising && _clock.getElapsedTime().asMilliseconds() > _speed) {
 		_x -= 8;
 		_clock.restart();
 	}
@@ -17,6 +17,7 @@ void Lava::rise() {
 
 void Lava::reset() {
 	_x = _levelHeight;
+	_rising = true;
 }
 
 void Lava::draw(sf::RenderWindow* window, int levelWidth, int levelHeight) {

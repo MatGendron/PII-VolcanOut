@@ -1,4 +1,4 @@
-#include "Player.hpp"
+﻿#include "Player.hpp"
 
 using namespace std;
 
@@ -36,12 +36,12 @@ Player::Player(Level* level, Lava* lava) {
 	_direction = Direction::RIGHT;
 	_level = level;
 	_lava = lava;
-	idle();
+	instructions();
 	_gravity = 0.5;
 }
 
 void Player::idle() {
-	if (_state != State::LOSE && _y + 16 > _lava->getHeight()) {
+	if (_state != State::MESG && _y + 16 > _lava->getHeight()) {
 		lose();
 	}
 	switch (_state) {
@@ -51,9 +51,7 @@ void Player::idle() {
 	case State::FALL:
 		fall(false);
 		break;
-	case State::LOSE:
-		break;
-	case State::WIN:
+	case State::MESG:
 		break;
 	default:
 		_state = State::IDLE;
@@ -176,38 +174,48 @@ void Player::place() {
 	}
 }
 
-void Player::lose() {
-	_state = State::LOSE;
+void Player::message(string msg, unsigned int size) {
+	_state = State::MESG;
 	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
 		throw std::runtime_error("Couldn't load font for game over screen.");
 	}
 	_message.setFont(_font);
-	_message.setString(
-		"                     You lose!\n"
-		"Press any movement key to retry.");
-	_message.setCharacterSize(6);
-	_message.setFillColor(sf::Color::Green);
-	sf::FloatRect messageRect = _message.getLocalBounds();
-	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
-	_message.setPosition(sf::Vector2f(_level->getWidth()*8.f, _level->getHeight() * 8.f));
-	_clock.restart();
-}
-
-void Player::win() {
-	_state = State::WIN;
-	if (!_font.loadFromFile("Fonts/8-bit-pusab.ttf")) {
-		throw std::runtime_error("Couldn't load font for game win screen.");
-	}
-	_message.setFont(_font);
-	_message.setString(
-		"                      You Win!\n"
-		"Press any movement key to retry.");
-	_message.setCharacterSize(6);
+	_message.setString(msg);
+	_message.setCharacterSize(size);
 	_message.setFillColor(sf::Color::Green);
 	sf::FloatRect messageRect = _message.getLocalBounds();
 	_message.setOrigin(messageRect.width / 2.f, messageRect.height / 2);
 	_message.setPosition(sf::Vector2f(_level->getWidth() * 8.f, _level->getHeight() * 8.f));
 	_clock.restart();
+}
+
+void Player::instructions() {
+	message(
+		"  This game uses the four directionnal keys\n"
+		"Press left and right to move left and right\n"
+		"                           Press up to jump\n"
+		" Press down while airborne to place a block\n"
+		"              Press any key to start the game",
+		4
+	);
+	_lava->setRising(false);
+}
+
+void Player::lose() {
+	message(
+		"                     You lose!\n"
+		"Press any movement key to retry.",
+		6
+	);
+}
+
+void Player::win() {
+	message(
+		"                      You Win!\n"
+		"Press any movement key to retry.",
+		6
+	);
+	_lava->setRising(false);
 }
 
 bool Player::checkCollision(Direction dir) {
@@ -248,7 +256,7 @@ bool Player::checkCollision(Direction dir) {
 
 
 void Player::processDirection(Direction dir) {
-	if (_state == State::LOSE || _state == State::WIN) {
+	if (_state == State::MESG) {
 		if (_clock.getElapsedTime().asMilliseconds() < 500) {
 			return;
 		}
@@ -311,7 +319,7 @@ void Player::processDirection(Direction dir) {
 void Player::draw(sf::RenderWindow* window) {
 	_sprite.setPosition(_x, _y);
 	window->draw(_sprite);
-	if (_state == State::LOSE ||_state==State::WIN) {
+	if (_state == State::MESG) {
 		window->draw(_message);
 	}
 	window->draw(_blockCounterSpt);
