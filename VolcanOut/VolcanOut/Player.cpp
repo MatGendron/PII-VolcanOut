@@ -267,6 +267,7 @@ void Player::processDirection(Direction dir) {
 			_x = _level->getStartX() * 16;
 			_y = _level->getStartY() * 16;
 			_blockCount = _level->getBlockCount();
+			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
 		}
 	}
 	if (dir == Direction::UP && _level->getTile((int)(_x + 8) / 16, (int)(_y + 8) / 16) == 3) {
@@ -277,6 +278,8 @@ void Player::processDirection(Direction dir) {
 			_x = _level->getStartX() * 16;
 			_y = _level->getStartY() * 16;
 			_lava->updateParameters(_level);
+			_blockCount = _level->getBlockCount();
+			_blockCounterTxt.setString("X " + std::to_string(_blockCount));
 		}
 	}
 	if (_state == State::JUMP) {
